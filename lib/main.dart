@@ -11,10 +11,10 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCsHDQtI9DItQgSqwy45_y2xG9tDGxuER8",
-        appId: "1:540215271818:web:8b22d4aee01acdce862873",
-        messagingSenderId: "540215271818",
-        projectId: "flutter-firebase-9c136",
+        apiKey: "AIzaSyAAFYDjI0l1bA4AL_WB-bpZmg-cHv6KXww",
+        appId: "1:707031315192:android:8846f1378758812cf9010d",
+        messagingSenderId: "707031315192",
+        projectId: "fir-flutter-auth-d0aa5",
         // Your web Firebase config options
       ),
     );
