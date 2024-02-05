@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/description.dart';
 import 'package:movie_app/widgets/tv.dart';
@@ -20,7 +22,7 @@ class _AvailableMovieListState extends State<AvailableMovieList> {
     loadmovies();
   }
 
-  loadmovies() {
+  loadmovies()async{
     Iterable l = [
       {
         "adult": false,
@@ -158,6 +160,7 @@ class _AvailableMovieListState extends State<AvailableMovieList> {
         "vote_count": 15413
       }
     ];
+    // const data = FirebaseFirestore.instance.collection("AvailableMovies").snapshots();
     setState(() {
       tvmovies = List.from(l.map((model)=> (model)));
     });
@@ -168,30 +171,41 @@ class _AvailableMovieListState extends State<AvailableMovieList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Available Movies')),
-        body: ListView.builder(
-            itemCount: tvmovies.length,
-            itemBuilder: (context,index){
-              Map<String, dynamic> data = tvmovies[index];
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("AvailableMovies").snapshots(),
+          builder: (context, snapshot){
+            if(snapshot.connectionState == ConnectionState.active) {
+              if(snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: snapshot?.data?.docs?.length,
+                    itemBuilder: (context,index){
+                      QueryDocumentSnapshot<Map<String, dynamic>>? data = snapshot?.data?.docs[index];
 
-              // Extract data from the JSON object
-              return Card(
-                child: ListTile(
-                  title: Text(tvmovies[index]['title']),
-                  leading: const SizedBox(
-                      width: 50,
-                      height: 50
-                  ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(name: tvmovies[index]['title'],
-                      bannerurl: 'https://image.tmdb.org/t/p/w500'+tvmovies[index]['backdrop_path'],
-                      posterurl: 'https://image.tmdb.org/t/p/w500'+tvmovies[index]['poster_path'],
-                      description: tvmovies[index]['overview'],
-                      vote: tvmovies[index]['vote_average'].toString(),
-                      launch_on: tvmovies[index]['release_date'],)));
-                  },
-                ),
-              );
+                      // Extract data from the JSON object
+                      return Card(
+                        child: ListTile(
+                          title: Text(snapshot?.data?.docs[index]['title']),
+                          leading: const SizedBox(
+                              width: 50,
+                              height: 50
+                          ),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(name: snapshot?.data?.docs[index]['title'],
+                              bannerurl: 'https://image.tmdb.org/t/p/w500'+snapshot?.data?.docs[index]['backdrop_path'],
+                              posterurl: 'https://image.tmdb.org/t/p/w500'+snapshot?.data?.docs[index]['poster_path'],
+                              description: snapshot?.data?.docs[index]['overview'],
+                              vote: "${snapshot?.data?.docs[index]['vote_average']}",
+                              launch_on: snapshot?.data?.docs[index]['release_date'],)));
+                          },
+                        ),
+                      );
+                    }
+                );
+              }
             }
+
+            return Center(child: CircularProgressIndicator());
+          }
         )
     );
   }

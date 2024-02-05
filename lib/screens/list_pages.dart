@@ -3,7 +3,9 @@ import 'package:movie_app/screens/MovieList.dart';
 import 'package:movie_app/screens/home_screen.dart';
 
 class ListPage extends StatefulWidget {
-  const ListPage({super.key});
+  final String? user_email;
+  const ListPage({Key? key, this.user_email = ''})
+      : super(key: key);
 
   @override
   State<ListPage> createState() => _ListPageState();
@@ -16,7 +18,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('All Pages'),),
+        appBar: AppBar(title: Text("Hello ${widget.user_email}")),
         body: ListView.builder(
             itemCount: pageName.length,
             itemBuilder: (context,index){
@@ -28,15 +30,12 @@ class _ListPageState extends State<ListPage> {
                     height: 50
                   ),
                   onTap: (){
-                    print('Came Here');
                     if(pageName[index] == 'Book Ticket') {
-                      print('Going to movie Pages');
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const AvailableMovieList()));
                     }
                     if(pageName[index] == 'Movie & Series List') {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const HomeScreen()));
                     }
-
                   },
                 ),
               );

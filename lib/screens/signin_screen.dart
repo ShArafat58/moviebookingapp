@@ -56,8 +56,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       email: _emailTextController.text,
                       password: _passwordTextController.text)
                       .then((value) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const ListPage()));
+                        print("================ Firebase Authentication Value ===============");
+                        print(value?.user?.email);
+                        String? email = (value?.user?.email).toString();
+                        if(email != "") {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ListPage(user_email: email)));
+                        }
+
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });

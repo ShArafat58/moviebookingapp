@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/utils/text.dart';
 
 class Description extends StatelessWidget{
-  final String name, description, bannerurl, posterurl, vote, launch_on;
+  final String name, description, bannerurl, posterurl, vote, launch_on, email;
+  final bool bookTicket;
 
   const Description({this.name = '', this.description = '', this.bannerurl = '', this.posterurl = '',
-  this.vote = '', this.launch_on = ''});
+  this.vote = '', this.launch_on = '', this.email = '', this.bookTicket = false});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,8 @@ class Description extends StatelessWidget{
               ],
             )],
         ),
-      )
+      ),
+      // bottomNavigationBar: Button(),
     );
   }
 }
