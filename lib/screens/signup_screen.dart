@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movie_app/reusable_widgets/reusable_widget.dart';
 import 'package:movie_app/screens/home_screen.dart';
+import 'package:movie_app/screens/list_pages.dart';
 import 'package:movie_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+
+  Future<void> _addUser(String userEmail, String name) async {
+    try {
+
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference<Map<String, dynamic>> result = await firestore.collection('Users').add({
+        'email': userEmail,
+        'name': name,
+        'phone': '',
+        'created_at': DateTime.now(),
+        'updated_at': DateTime.now()
+      });
+
+    } catch (error) {
+      print('Error adding product to cart: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +86,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           password: _passwordTextController.text)
                           .then((value) {
                         print("Created New Account");
+                        _addUser(_emailTextController.text, _userNameTextController.text);
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()));
+                            MaterialPageRoute(builder: (context) => ListPage(user_email: _emailTextController.text)));
                       }).onError((error, stackTrace) {
                         print("Error ${error.toString()}");
                       });

@@ -3,7 +3,7 @@ import 'package:movie_app/screens/MovieList.dart';
 import 'package:movie_app/screens/home_screen.dart';
 
 class ListPage extends StatefulWidget {
-  final String? user_email;
+  final String user_email;
   const ListPage({Key? key, this.user_email = ''})
       : super(key: key);
 
@@ -12,7 +12,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  static List<String> pageName =['Book Ticket','Seat Booking','View Timing', 'Movie & Series List', 'Payment'];
+  static List<String> pageName =['Book Ticket','Movie & Series List'];
 
 
   @override
@@ -31,7 +31,8 @@ class _ListPageState extends State<ListPage> {
                   ),
                   onTap: (){
                     if(pageName[index] == 'Book Ticket') {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const AvailableMovieList()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                          AvailableMovieList(user_email: "${widget.user_email}")));
                     }
                     if(pageName[index] == 'Movie & Series List') {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const HomeScreen()));

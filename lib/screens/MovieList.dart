@@ -7,7 +7,9 @@ import 'package:movie_app/description.dart';
 import 'package:movie_app/widgets/tv.dart';
 
 class AvailableMovieList extends StatefulWidget {
-  const AvailableMovieList({super.key});
+  final String user_email;
+  const AvailableMovieList({Key? key, this.user_email = ''})
+      : super(key: key);
 
   @override
   State<AvailableMovieList> createState() => _AvailableMovieListState();
@@ -195,7 +197,9 @@ class _AvailableMovieListState extends State<AvailableMovieList> {
                               posterurl: 'https://image.tmdb.org/t/p/w500'+snapshot?.data?.docs[index]['poster_path'],
                               description: snapshot?.data?.docs[index]['overview'],
                               vote: "${snapshot?.data?.docs[index]['vote_average']}",
-                              launch_on: snapshot?.data?.docs[index]['release_date'],)));
+                              launch_on: snapshot?.data?.docs[index]['release_date'],
+                              email: widget.user_email,
+                            )));
                           },
                         ),
                       );
